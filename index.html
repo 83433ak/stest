@@ -1,171 +1,192 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>不想上班评级表（10级版）</title>
-  <style>
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;margin:0;background:#0f172a;color:#e6eef8;overflow-x:hidden;}
-    .wrap{max-width:700px;margin:40px auto;padding:24px;background:#111b2b;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.4);transition:all .6s ease;}
-    h1{text-align:center;font-size:22px;margin-bottom:10px}
-    p{text-align:center;color:#9aa4b2;font-size:14px}
-    form{margin-top:24px;opacity:1;transition:opacity .6s ease;}
-    .fade-out{opacity:0;pointer-events:none;transform:translateY(-20px);}
-    .q{margin-bottom:20px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px}
-    .q h3{margin:0 0 8px;font-size:16px}
-    label{display:block;margin:4px 0;cursor:pointer}
-    input[type=radio]{margin-right:6px}
-    button{margin-top:10px;padding:10px 18px;border:0;border-radius:8px;background:#ffb86b;color:#111;font-weight:600;cursor:pointer;transition:all .3s}
-    button:hover{opacity:0.85;}
-    #result{display:none;opacity:0;margin-top:24px;text-align:center;padding:16px;border-radius:10px;background:rgba(255,255,255,0.05);transition:opacity .6s ease;}
-    #result.show{display:block;opacity:1;}
-    #result h2{margin:0;font-size:20px}
-    #result p{color:#9aa4b2}
-    #restart{margin-top:20px;background:#3b82f6;color:#fff;}
-  </style>
+<meta charset="UTF-8">
+<title>SB</title>
+
+<style>
+
+body{
+    margin:0;
+    background:black;
+    overflow:hidden;
+    font-family:Arial;
+}
+
+/* 背景SB水印 */
+
+.watermark{
+    position:absolute;
+    color:rgba(255,255,255,0.05);
+    font-size:40px;
+    user-select:none;
+}
+
+/* 中间SB */
+
+.center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    font-size:120px;
+    font-weight:bold;
+    color:white;
+    transform:translate(-50%,-50%);
+    text-shadow:
+        0 0 10px #ff0000,
+        0 0 20px #ff6600,
+        0 0 40px #ff9900,
+        0 0 80px #ffff00;
+
+    animation:
+        heartbeat 1s infinite,
+        spin 4s linear infinite;
+}
+
+/* 心跳效果 */
+
+@keyframes heartbeat{
+
+    0%{transform:translate(-50%,-50%) scale(1);}
+    25%{transform:translate(-50%,-50%) scale(1.2);}
+    40%{transform:translate(-50%,-50%) scale(1);}
+    60%{transform:translate(-50%,-50%) scale(1.3);}
+    100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+/* 旋转 */
+
+@keyframes spin{
+
+    from{rotate:0deg;}
+    to{rotate:360deg;}
+
+}
+
+/* 炫彩SB粒子 */
+
+.sb{
+    position:absolute;
+    font-weight:bold;
+    animation:fly linear infinite;
+}
+
+@keyframes fly{
+
+    from{
+        transform:translateY(100vh) rotate(0deg);
+        opacity:1;
+    }
+
+    to{
+        transform:translateY(-100vh) rotate(720deg);
+        opacity:0;
+    }
+
+}
+
+/* 火焰粒子 */
+
+.fire{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:orange;
+    border-radius:50%;
+    pointer-events:none;
+    animation:fire 1s linear forwards;
+}
+
+@keyframes fire{
+
+    from{
+        transform:translate(0,0) scale(1);
+        opacity:1;
+    }
+
+    to{
+        transform:translate(var(--x),var(--y)) scale(0);
+        opacity:0;
+    }
+
+}
+
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <h1>不想上班评级表</h1>
-    <p>选择最符合你现状的选项，看看你有多不想上班 😭（10级评级）</p>
-    <form id="quizForm">
-      <div class="q">
-        <h3>1. 今天早上起床时的感受？</h3>
-        <label><input type="radio" name="q1" value="1"> 满血复活，热爱工作</label>
-        <label><input type="radio" name="q1" value="2"> 挺有精神，能应付</label>
-        <label><input type="radio" name="q1" value="3"> 有点困，但能动</label>
-        <label><input type="radio" name="q1" value="4"> 想赖床一会儿</label>
-        <label><input type="radio" name="q1" value="5"> 心里开始抗拒</label>
-        <label><input type="radio" name="q1" value="6"> 不想动，脑袋嗡嗡的</label>
-        <label><input type="radio" name="q1" value="7"> 起床成了折磨</label>
-        <label><input type="radio" name="q1" value="8"> 只想请假一天</label>
-        <label><input type="radio" name="q1" value="9"> 想逃离城市</label>
-        <label><input type="radio" name="q1" value="10"> 我拒绝上班</label>
-      </div>
-      <div class="q">
-        <h3>2. 想到今天的工作内容时，你的心情？</h3>
-        <label><input type="radio" name="q2" value="1"> 兴奋期待</label>
-        <label><input type="radio" name="q2" value="2"> 还不错</label>
-        <label><input type="radio" name="q2" value="3"> 一般般</label>
-        <label><input type="radio" name="q2" value="4"> 有点无聊</label>
-        <label><input type="radio" name="q2" value="5"> 有点烦</label>
-        <label><input type="radio" name="q2" value="6"> 完全提不起兴趣</label>
-        <label><input type="radio" name="q2" value="7"> 压力山大</label>
-        <label><input type="radio" name="q2" value="8"> 想辞职</label>
-        <label><input type="radio" name="q2" value="9"> 怀疑人生</label>
-        <label><input type="radio" name="q2" value="10"> 崩溃边缘</label>
-      </div>
-      <div class="q">
-        <h3>3. 你对同事或上司的感觉？</h3>
-        <label><input type="radio" name="q3" value="1"> 氛围超棒</label>
-        <label><input type="radio" name="q3" value="2"> 关系还行</label>
-        <label><input type="radio" name="q3" value="3"> 偶尔烦人</label>
-        <label><input type="radio" name="q3" value="4"> 有点紧张</label>
-        <label><input type="radio" name="q3" value="5"> 交流困难</label>
-        <label><input type="radio" name="q3" value="6"> 假笑社交中</label>
-        <label><input type="radio" name="q3" value="7"> 感到压抑</label>
-        <label><input type="radio" name="q3" value="8"> 想离职避人</label>
-        <label><input type="radio" name="q3" value="9"> 不想再见</label>
-        <label><input type="radio" name="q3" value="10"> 看到消息都焦虑</label>
-      </div>
-      <div class="q">
-        <h3>4. 你对薪水或前景的满意度？</h3>
-        <label><input type="radio" name="q4" value="1"> 很满意</label>
-        <label><input type="radio" name="q4" value="2"> 还可以</label>
-        <label><input type="radio" name="q4" value="3"> 普通</label>
-        <label><input type="radio" name="q4" value="4"> 稍微不满</label>
-        <label><input type="radio" name="q4" value="5"> 有点失望</label>
-        <label><input type="radio" name="q4" value="6"> 不太行</label>
-        <label><input type="radio" name="q4" value="7"> 非常不满</label>
-        <label><input type="radio" name="q4" value="8"> 想跳槽</label>
-        <label><input type="radio" name="q4" value="9"> 绝望</label>
-        <label><input type="radio" name="q4" value="10"> 已开始投简历</label>
-      </div>
-      <div class="q">
-        <h3>5. 如果现在让你选择，你会？</h3>
-        <label><input type="radio" name="q5" value="1"> 马上出门上班</label>
-        <label><input type="radio" name="q5" value="2"> 先喝口水</label>
-        <label><input type="radio" name="q5" value="3"> 打开手机摸鱼</label>
-        <label><input type="radio" name="q5" value="4"> 想再拖一会儿</label>
-        <label><input type="radio" name="q5" value="5"> 磨蹭中</label>
-        <label><input type="radio" name="q5" value="6"> 开始找借口</label>
-        <label><input type="radio" name="q5" value="7"> 计划请假</label>
-        <label><input type="radio" name="q5" value="8"> 准备躺平</label>
-        <label><input type="radio" name="q5" value="9"> 关掉闹钟再睡</label>
-        <label><input type="radio" name="q5" value="10"> 决定明天再说</label>
-      </div>
-      <button type="button" id="submit">查看评级结果</button>
-    </form>
 
-    <div id="result">
-      <h2 id="level"></h2>
-      <p id="desc"></p>
-      <button id="restart">重新测一次</button>
-    </div>
-  </div>
+<div class="center">SB</div>
 
-  <script>
-    const form=document.getElementById('quizForm');
-    const result=document.getElementById('result');
-    const levelEl=document.getElementById('level');
-    const descEl=document.getElementById('desc');
-    const restartBtn=document.getElementById('restart');
+<script>
 
-    const levels=[
-      '🤩 超想上班',
-      '😀 状态良好',
-      '🙂 轻微疲惫',
-      '😐 有点懒',
-      '😕 不太想上班',
-      '😩 很不想上班',
-      '😫 非常厌倦',
-      '😭 想请假',
-      '🤯 精神崩溃',
-      '💀 彻底不想上班'
-    ];
+/* 背景SB水印 */
 
-    const descs=[
-      '你充满干劲，真是模范员工！',
-      '工作和生活平衡得不错。',
-      '小疲惫可以通过音乐和咖啡恢复。',
-      '可能需要一点动力。',
-      '精神有点低落，注意调整。',
-      '对工作有厌倦感，适当放松一下。',
-      '需要多休息，避免倦怠。',
-      '你迫切需要假期！',
-      '考虑休息或沟通调整工作状态。',
-      '别再撑了，好好休息吧。'
-    ];
+for(let i=0;i<200;i++){
 
-    document.getElementById('submit').addEventListener('click',()=>{
-      let total=0,count=0;
-      for(let i=1;i<=5;i++){
-        const v=document.querySelector(`input[name=q${i}]:checked`);
-        if(v){total+=Number(v.value);count++;}
-      }
-      if(count<5){alert('请完成所有问题再提交！');return;}
-      const avg=total/count;
-      const idx=Math.min(9,Math.max(0,Math.round(avg)-1));
-      const level=levels[idx];
-      const desc=descs[idx];
+    const w=document.createElement("div")
+    w.className="watermark"
+    w.innerText="SB"
 
-      form.classList.add('fade-out');
-      setTimeout(()=>{
-        form.style.display='none';
-        levelEl.textContent=level;
-        descEl.textContent=desc;
-        result.classList.add('show');
-        result.scrollIntoView({behavior:'smooth'});
-      },600);
-    });
+    w.style.left=Math.random()*window.innerWidth+"px"
+    w.style.top=Math.random()*window.innerHeight+"px"
 
-    restartBtn.addEventListener('click',()=>{
-      form.reset();
-      result.classList.remove('show');
-      form.style.display='block';
-      setTimeout(()=>{form.classList.remove('fade-out');},100);
-      window.scrollTo({top:0,behavior:'smooth'});
-    });
-  </script>
+    document.body.appendChild(w)
+}
+
+/* 炫彩飞行SB */
+
+function createSB(){
+
+    const sb=document.createElement("div")
+    sb.className="sb"
+    sb.innerText="SB"
+
+    sb.style.left=Math.random()*window.innerWidth+"px"
+    sb.style.fontSize=(20+Math.random()*50)+"px"
+
+    const hue=Math.floor(Math.random()*360)
+    sb.style.color="hsl("+hue+",100%,60%)"
+
+    sb.style.animationDuration=(3+Math.random()*5)+"s"
+
+    document.body.appendChild(sb)
+
+    setTimeout(()=>{sb.remove()},8000)
+}
+
+setInterval(createSB,120)
+
+/* 火焰粒子 */
+
+const center=document.querySelector(".center")
+
+setInterval(()=>{
+
+    const rect=center.getBoundingClientRect()
+
+    for(let i=0;i<6;i++){
+
+        const f=document.createElement("div")
+        f.className="fire"
+
+        f.style.left=rect.left+rect.width/2+"px"
+        f.style.top=rect.top+rect.height/2+"px"
+
+        const x=(Math.random()-0.5)*120+"px"
+        const y=(Math.random()-1)*140+"px"
+
+        f.style.setProperty("--x",x)
+        f.style.setProperty("--y",y)
+
+        document.body.appendChild(f)
+
+        setTimeout(()=>{f.remove()},1000)
+    }
+
+},120)
+
+</script>
+
 </body>
 </html>
