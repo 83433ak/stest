@@ -43,7 +43,15 @@ body{
         spin 4s linear infinite;
 }
 
-/* 心跳效果 */
+/* 鼠标靠近加速旋转 */
+
+.center:hover{
+    animation:
+        heartbeat 1s infinite,
+        spin 0.4s linear infinite;
+}
+
+/* 心跳 */
 
 @keyframes heartbeat{
 
@@ -57,13 +65,11 @@ body{
 /* 旋转 */
 
 @keyframes spin{
-
     from{rotate:0deg;}
     to{rotate:360deg;}
-
 }
 
-/* 炫彩SB粒子 */
+/* 炫彩粒子 */
 
 .sb{
     position:absolute;
@@ -120,7 +126,9 @@ body{
 
 <script>
 
-/* 背景SB水印 */
+const center=document.querySelector(".center")
+
+/* 背景水印 */
 
 for(let i=0;i<200;i++){
 
@@ -134,7 +142,7 @@ for(let i=0;i<200;i++){
     document.body.appendChild(w)
 }
 
-/* 炫彩飞行SB */
+/* SB 粒子 */
 
 function createSB(){
 
@@ -143,23 +151,23 @@ function createSB(){
     sb.innerText="SB"
 
     sb.style.left=Math.random()*window.innerWidth+"px"
+    sb.style.top=window.innerHeight+"px"
+
     sb.style.fontSize=(20+Math.random()*50)+"px"
 
     const hue=Math.floor(Math.random()*360)
     sb.style.color="hsl("+hue+",100%,60%)"
 
-    sb.style.animationDuration=(3+Math.random()*5)+"s"
+    sb.style.animationDuration=(4+Math.random()*4)+"s"
 
     document.body.appendChild(sb)
 
-    setTimeout(()=>{sb.remove()},8000)
+    setTimeout(()=>{sb.remove()},9000)
 }
 
 setInterval(createSB,120)
 
 /* 火焰粒子 */
-
-const center=document.querySelector(".center")
 
 setInterval(()=>{
 
@@ -174,7 +182,7 @@ setInterval(()=>{
         f.style.top=rect.top+rect.height/2+"px"
 
         const x=(Math.random()-0.5)*120+"px"
-        const y=(Math.random()-1)*140+"px"
+        const y=(Math.random()-1)*150+"px"
 
         f.style.setProperty("--x",x)
         f.style.setProperty("--y",y)
@@ -185,6 +193,41 @@ setInterval(()=>{
     }
 
 },120)
+
+/* 黑洞吸粒子效果 */
+
+let attract=false
+
+center.addEventListener("mouseenter",()=>{
+    attract=true
+})
+
+center.addEventListener("mouseleave",()=>{
+    attract=false
+})
+
+setInterval(()=>{
+
+    if(!attract) return
+
+    const rect=center.getBoundingClientRect()
+    const cx=rect.left+rect.width/2
+    const cy=rect.top+rect.height/2
+
+    document.querySelectorAll(".sb").forEach(p=>{
+
+        const px=p.offsetLeft
+        const py=p.offsetTop
+
+        const dx=cx-px
+        const dy=cy-py
+
+        p.style.left=px+dx*0.05+"px"
+        p.style.top=py+dy*0.05+"px"
+
+    })
+
+},30)
 
 </script>
 
